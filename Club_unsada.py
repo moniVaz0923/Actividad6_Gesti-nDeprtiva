@@ -1,33 +1,37 @@
 
 class Jugador: 
     def __init__(self, nro_camiseta, apellido, posicion, minutos):
-        # Atributos básicos definidos en la clase padre
-        self.nro_camiseta = nro_camiseta
-        self.apellido = apellido
+        self.nro_camiseta = str(nro_camiseta)
+        self.apellido = str(apellido).capitalize()
         self.posicion = posicion
-        self.minutos = minutos
+        self._minutos = int(minutos) if str(minutos).isdigit() else 0
+
+    @property
+    def minutos(self):
+        return self._minutos
+
+    @minutos.setter
+    def minutos(self, valor):
+        if int(valor) >= 0:
+            self._minutos = int(valor)
 
     def obtener_resumen(self):
         return f"{self.apellido} (#{self.nro_camiseta}) - {self.posicion}"
 
-# Aplicamos HERENCIA: Arquero hereda de Jugador
 class Arquero(Jugador): 
     def __init__(self, nro_camiseta, apellido, minutos):
-        # El arquero no registra goles según la consigna 
+        # Los arqueros no suman goles en este sistema
         super().__init__(nro_camiseta, apellido, "Arquero", minutos)
 
-# Aplicamos HERENCIA para jugadores que sí marcan goles
 class JugadorCampo(Jugador): 
-    def __init__(self, nro_camiseta, apellido, posicion, minutos, goles):
+    def __init__(self, nro_camiseta, apellido, posicion, goles, minutos):
         super().__init__(nro_camiseta, apellido, posicion, minutos)
-        # ENCAPSULACIÓN: Atributo privado con doble guion bajo
-        self.__goles = goles 
+        self.__goles = int(goles) if str(goles).isdigit() else 0
 
-    # Método GET para acceder al valor privado desde afuera
     def get_goles(self): 
         return self.__goles
     
-    # Método SET por si necesitás actualizar los goles después
     def set_goles(self, nuevos_goles):
-        self.__goles = nuevos_goles
-        
+        if int(nuevos_goles) >= 0:
+            self.__goles = int(nuevos_goles)
+            
